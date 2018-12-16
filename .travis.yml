@@ -33,6 +33,7 @@ before_install:
 
 script:
 - ./mvnw -U
+- java -jar ./app-level-1/target/*.jar
 - java -jar ./app/target/*.jar
 
 notifications:
