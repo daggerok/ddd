@@ -1,29 +1,28 @@
-package com.github.daggerok.ddd.app.es
+package com.github.daggerok.ddd.app.cqrsandeventsourcing
 
 import spock.lang.Specification
 
 class BankAccountSpecification extends Specification {
 
-  UUID id
+  UUID aggregateId
   BankAccount account
 
   void setup() {
-    id = UUID.randomUUID()
-    account = new BankAccount(id)
+    account = new BankAccount(aggregateId = UUID.randomUUID())
   }
 
   def 'should create account'() {
     given:
-      id = UUID.randomUUID()
+      aggregateId = UUID.randomUUID()
     when:
-      account = new BankAccount(id)
+      account = new BankAccount(aggregateId)
     then:
-      account.id == id
+      account.aggregateId == aggregateId
   }
 
   def 'should deposit'() {
     when:
-      account.deposit 100
+      account.deposit 100 as BigDecimal
     then:
       account.balance == 100
   }
@@ -48,6 +47,6 @@ class BankAccountSpecification extends Specification {
 
   void cleanup() {
     account = null
-    id = null
+    aggregateId = null
   }
 }
