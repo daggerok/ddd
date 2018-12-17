@@ -1,40 +1,36 @@
 env:
   global:
-  - TERM=dumb
+    - TERM=dumb
 
 language: java
 jdk: oraclejdk8
 node_js: lts/*
 
 service:
-- docker
+  - docker
 
 addons:
   apt:
     packages:
-    - libappindicator1
-    - fonts-liberation
-    - bash
-    - curl
-    - libxml2-utils
-    - docker-ce
-    - google-chrome-stable
-    - tree
-    - jq
-    - python-pip
+      - bash
+      - curl
+      - tree
+      - jq
+      - python-pip
 
 install: true
 before_install:
-- sudo apt-get update -yqq
-- sudo pip install docker-compose httpie >/dev/null 2>&1
-#
-- source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
-- stop_any 8080 80
+  - sudo apt-get update -yqq
+  - sudo pip install docker-compose httpie >/dev/null 2>&1
+  #
+  - source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
+  - stop_any 8080 80
 
 script:
-- ./mvnw -U
-- java -jar ./app-level-1/target/*.jar
-- java -jar ./app/target/*.jar
+  - ./mvnw -U
+  - java -jar ./app-level-1/target/*.jar
+  - java -jar ./fold-left-java-app/target/*.jar
+  - java -jar ./fold-left-vavr-app/target/*.jar
 
 notifications:
   email: false
