@@ -44,7 +44,7 @@ before_install:
   - wait_for ${ZOOKEEPER_PORT}
   - bash -c "${KAFKA_HOME}/bin/kafka-server-start.sh ${KAFKA_HOME}/config/server.properties &"
   - wait_for ${KAFKA_PORT}
-  - bash -c "${KAFKA_HOME}/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic test.1 --zookeeper ${ZOOKEEPER_PEERS}"
+  - bash -c "${KAFKA_HOME}/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic bank-account-domain-events-kafka-template-topic.1 --zookeeper ${ZOOKEEPER_PEERS}"
 
 script:
   - ./mvnw -U

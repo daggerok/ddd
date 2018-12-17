@@ -9,6 +9,5 @@ public class DDDApplication {
   public static void main(String[] args) {
     SpringApplication.run(DDDApplication.class, args);
   }
-
 }
 

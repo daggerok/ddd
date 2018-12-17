@@ -19,10 +19,8 @@ import static java.time.ZonedDateTime.now;
 @EqualsAndHashCode
 public class BankAccount {
 
-  @Getter
-  private UUID aggregateId;
-  @Getter
-  private BigDecimal balance;
+  @Getter private UUID aggregateId;
+  @Getter private BigDecimal balance;
   private List<DomainEvent> dirtyEvents;
 
   public BankAccount(UUID aggregateId) {

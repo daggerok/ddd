@@ -1,5 +1,8 @@
 package com.github.daggerok.ddd.app.cqrsandeventsourcing;
 
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,13 +11,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.github.daggerok.ddd.app.cqrsandeventsourcing.KafkaBrokerAppConfig.KAFKA_TOPIC;
 import static java.util.Objects.isNull;
 
+@Repository
 public class BankAccountRepository {
 
+  private final KafkaTemplate<String, DomainEvent> kafkaTemplate;
   private final Map<UUID, List<DomainEvent>> eventStream;
 
-  public BankAccountRepository() {
+  public BankAccountRepository(KafkaTemplate<String, DomainEvent> kafkaTemplate) {
+    this.kafkaTemplate = kafkaTemplate;
     eventStream = new ConcurrentHashMap<>();
   }
 
@@ -31,6 +38,8 @@ public class BankAccountRepository {
     eventStream.put(aggregateId, Stream.concat(domainEvents(aggregateId).stream(),
                                                dirtyDomainEvents.stream())
                                        .collect(Collectors.toList()));
+    dirtyDomainEvents.forEach(domainEvent -> kafkaTemplate.send(KAFKA_TOPIC, domainEvent));
+    //kafkaTemplate.flush();
     aggregate.flushDirtyEvents();
   }
 
