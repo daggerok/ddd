@@ -25,6 +25,7 @@
     <module>fold-left-java-app</module>
     <module>fold-left-vavr-app</module>
     <module>kafka-app</module>
+    <module>plain-java-aggregate</module>
   </modules>
 
   <build>

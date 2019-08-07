@@ -6,11 +6,8 @@ git:
   quiet: true
 
 language: java
-jdk: oraclejdk8
+jdk: openjdk8
 node_js: lts/*
-
-#service:
-#  - docker
 
 addons:
   apt:
@@ -24,21 +21,27 @@ addons:
 env:
   global:
     - TERM=dumb
+    #
     - ZOOKEEPER_PORT=2181
     - ZOOKEEPER_PEERS=localhost:${ZOOKEEPER_PORT}
+    #
     - KAFKA_HOME=/tmp/kafka
     - KAFKA_PORT=9092
     - KAFKA_PEERS=localhost:${KAFKA_PORT}
+    - KAFKA_VERSION=2.1.1
 
 install: true
 before_install:
   - sudo apt-get update -yqq
-#  - sudo pip install docker-compose httpie >/dev/null 2>&1
+  #- sudo pip install docker-compose httpie >/dev/null 2>&1
   #
   - source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
   - stop_any 8080 80
   #
-  - wget https://www.apache.org/dist/kafka/2.1.0/kafka_2.12-2.1.0.tgz -O ${KAFKA_HOME}.tgz
+  #- wget https://www.apache.org/dist/kafka/2.1.0/kafka_2.12-2.1.0.tgz -O ${KAFKA_HOME}.tgz
+  ## migrated 2.1.0 -> 2.1.1:
+  - wget https://www.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_2.12-${KAFKA_VERSION}.tgz -O ${KAFKA_HOME}.tgz
+  #- wget https://www.apache.org/dist/kafka/2.1.1/kafka_2.12-2.1.1.tgz -O ${KAFKA_HOME}.tgz
   - mkdir -p ${KAFKA_HOME} && tar xzf ${KAFKA_HOME}.tgz -C ${KAFKA_HOME} --strip-components 1
   - bash -c "${KAFKA_HOME}/bin/zookeeper-server-start.sh ${KAFKA_HOME}/config/zookeeper.properties &"
   - wait_for ${ZOOKEEPER_PORT}
@@ -54,3 +57,9 @@ script:
 
 after_script:
   - stop_any ${KAFKA_PORT} ${ZOOKEEPER_PORT}
+  - ./mvnw versions:display-property-updates
+
+cache:
+  packages: true
+  directories:
+  - ~/.m2
