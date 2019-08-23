@@ -10,4 +10,3 @@ public class DDDApplication {
     SpringApplication.run(DDDApplication.class, args);
   }
 }
-

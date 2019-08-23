@@ -18,36 +18,42 @@ addons:
       - jq
       - python-pip
 
-env:
-  global:
-    - TERM=dumb
-    #
-    - ZOOKEEPER_PORT=2181
-    - ZOOKEEPER_PEERS=localhost:${ZOOKEEPER_PORT}
-    #
-    - KAFKA_HOME=/tmp/kafka
-    - KAFKA_PORT=9092
-    - KAFKA_PEERS=localhost:${KAFKA_PORT}
-    - KAFKA_VERSION=2.1.1
-
 install: true
+
+#env:
+#  global:
+#    - TERM=dumb
+#    #
+#    - ZOOKEEPER_PORT=2181
+#    - ZOOKEEPER_PEERS=localhost:${ZOOKEEPER_PORT}
+#    #
+#    - KAFKA_HOME=/tmp/kafka
+#    - KAFKA_PORT=9092
+#    - KAFKA_PEERS=localhost:${KAFKA_PORT}
+#    - KAFKA_VERSION=2.1.1
+#before_install:
+#  - sudo apt-get update -yqq
+#  #- sudo pip install docker-compose httpie >/dev/null 2>&1
+#  - source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
+#  - stop_any 8080 80
+#  #- wget https://www.apache.org/dist/kafka/2.1.0/kafka_2.12-2.1.0.tgz -O ${KAFKA_HOME}.tgz
+#  ## migrated 2.1.0 -> 2.1.1:
+#  - wget https://www.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_2.12-${KAFKA_VERSION}.tgz -O ${KAFKA_HOME}.tgz
+#  #- wget https://www.apache.org/dist/kafka/2.1.1/kafka_2.12-2.1.1.tgz -O ${KAFKA_HOME}.tgz
+#  - mkdir -p ${KAFKA_HOME} && tar xzf ${KAFKA_HOME}.tgz -C ${KAFKA_HOME} --strip-components 1
+#  - bash -c "${KAFKA_HOME}/bin/zookeeper-server-start.sh ${KAFKA_HOME}/config/zookeeper.properties &"
+#  - wait_for ${ZOOKEEPER_PORT}
+#  - bash -c "${KAFKA_HOME}/bin/kafka-server-start.sh ${KAFKA_HOME}/config/server.properties &"
+#  - wait_for ${KAFKA_PORT}
+#  - bash -c "${KAFKA_HOME}/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic bank-account-domain-events-kafka-template-topic.1 --zookeeper ${ZOOKEEPER_PEERS}"
+
 before_install:
   - sudo apt-get update -yqq
-  #- sudo pip install docker-compose httpie >/dev/null 2>&1
-  #
+  - sudo pip install docker-compose httpie >/dev/null 2>&1
   - source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
   - stop_any 8080 80
-  #
-  #- wget https://www.apache.org/dist/kafka/2.1.0/kafka_2.12-2.1.0.tgz -O ${KAFKA_HOME}.tgz
-  ## migrated 2.1.0 -> 2.1.1:
-  - wget https://www.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_2.12-${KAFKA_VERSION}.tgz -O ${KAFKA_HOME}.tgz
-  #- wget https://www.apache.org/dist/kafka/2.1.1/kafka_2.12-2.1.1.tgz -O ${KAFKA_HOME}.tgz
-  - mkdir -p ${KAFKA_HOME} && tar xzf ${KAFKA_HOME}.tgz -C ${KAFKA_HOME} --strip-components 1
-  - bash -c "${KAFKA_HOME}/bin/zookeeper-server-start.sh ${KAFKA_HOME}/config/zookeeper.properties &"
-  - wait_for ${ZOOKEEPER_PORT}
-  - bash -c "${KAFKA_HOME}/bin/kafka-server-start.sh ${KAFKA_HOME}/config/server.properties &"
-  - wait_for ${KAFKA_PORT}
-  - bash -c "${KAFKA_HOME}/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic bank-account-domain-events-kafka-template-topic.1 --zookeeper ${ZOOKEEPER_PEERS}"
+  - docker-compose up -d
+  - docker-compose ps
 
 script:
   - ./mvnw -U

@@ -1,5 +1,18 @@
 = ddd image:https://travis-ci.org/daggerok/ddd.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/ddd"]
 
+////
+[source,bash]
+----
+wget https://raw.githubusercontent.com/confluentinc/cp-docker-images/5.3.0-post/examples/kafka-single-node/docker-compose.yml
+docker-compose up
+----
+////
+
+[source,bash]
+----
+docker-compose up
+----
+
 - see link:https://www.youtube.com/watch?v=r7AGQsM7ncA[YouTube: State or Events? Which Shall I Keep? - Jakub Pilimon, Kenny Bastani]
 - also read: link:https://pysaumont.github.io/2016/07/06/Folding-the-Universe-part-I-I-I-Java-8-List-and-Stream.html[Folding the Universe]
 - and this: link:https://www.quora.com/Why-doesnt-Java-8-have-functions-like-foldLeft-and-scanleft[Why doesn't Java 8 have functions like foldLeft and scanleft?]
